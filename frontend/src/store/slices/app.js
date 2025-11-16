@@ -1,9 +1,13 @@
 const AppSlice = {
+  namespaced: true,
   state: () => ({
     snackbarText: "",
     snackbarColor: "",
     snackbarVisible: false,
     selectedCompany: null,
+    loading: false,
+    error: null,
+    success: null,
   }),
   mutations: {
     showSnackbar(state, { text, color = "success" }) {
@@ -20,18 +24,16 @@ const AppSlice = {
       state.selectedCompany = company;
     },
   },
-  getters: {
-    snackbarText(state) {
-      return state.snackbarText;
+  actions: {
+    showSnackbar({ state, commit }, { text, color = "success" }) {
+      if (state.loading) return;
+      commit("showSnackbar", { text, color });
     },
-    snackbarColor(state) {
-      return state.snackbarColor;
+    hideSnackbar({ commit }) {
+      commit("hideSnackbar");
     },
-    snackbarVisible(state) {
-      return state.snackbarVisible;
-    },
-    selectedCompany(state) {
-      return state.selectedCompany;
+    setSelectedCompany({ commit }, company) {
+      commit("setSelectedCompany", company);
     },
   },
 };

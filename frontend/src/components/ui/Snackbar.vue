@@ -12,23 +12,23 @@ export default {
   computed: {
     visible: {
       get() {
-        return this.$store.getters["snackbarVisible"];
+        return this.$store.state.app.snackbarVisible;
       },
       set(value) {
-        if (!value) this.$store.commit("hideSnackbar");
+        if (!value) this.$store.commit("app/hideSnackbar");
       },
     },
     text() {
-      return this.$store.getters["snackbarText"];
+      return this.$store.state.app.snackbarText;
     },
     color() {
-      return this.$store.getters["snackbarColor"];
+      return this.$store.state.app.snackbarColor;
     },
   },
   methods: {
     onClose(value) {
       if (!value) {
-        this.$store.commit("hideSnackbar");
+        this.$store.commit("app/hideSnackbar");
       }
     },
   },

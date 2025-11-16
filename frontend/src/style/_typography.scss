@@ -1,0 +1,75 @@
+@import "variable";
+
+/* ===== Paragraphs ===== */
+p {
+  margin-bottom: 1rem;
+  font-size: $fs-md;
+  line-height: $lh-relaxed;
+}
+
+.text-muted {
+  color: hsla(0, 0%, 45%, 1);
+}
+
+.text-small {
+  font-size: $fs-sm;
+}
+
+/* ===== Headings ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-primary;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: $primary_text;
+}
+
+h1 {
+  font-size: $fs-5xl;
+  line-height: $lh-tight;
+}
+h2 {
+  font-size: $fs-4xl;
+  line-height: $lh-tight;
+}
+h3 {
+  font-size: $fs-3xl;
+  line-height: $lh-tight;
+}
+h4 {
+  font-size: $fs-2xl;
+}
+h5 {
+  font-size: $fs-xl;
+}
+h6 {
+  font-size: $fs-lg;
+}
+
+/* ===== Links ===== */
+a {
+  color: $link;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ===== Responsive Typography ===== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+  h2 {
+    font-size: 1.9rem;
+  }
+  h3 {
+    font-size: 1.6rem;
+  }
+}

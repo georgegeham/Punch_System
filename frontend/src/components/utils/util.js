@@ -10,7 +10,7 @@ export const getLocation = (store) => {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       const error = "Geolocation is not supported by your browser";
-      store.commit("showSnackbar", {
+      store.commit("app/showSnackbar", {
         text: error,
         color: "error",
       });
@@ -18,7 +18,7 @@ export const getLocation = (store) => {
       return;
     }
 
-    store.commit("showSnackbar", {
+    store.commit("app/showSnackbar", {
       text: "Capturing location...",
       color: "info",
     });
@@ -29,7 +29,7 @@ export const getLocation = (store) => {
         const longitude = position.coords.longitude;
         const location = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
 
-        store.commit("showSnackbar", {
+        store.commit("app/showSnackbar", {
           text: "Location captured successfully!",
           color: "success",
         });
@@ -51,7 +51,7 @@ export const getLocation = (store) => {
             break;
         }
 
-        store.commit("showSnackbar", {
+        store.commit("app/showSnackbar", {
           text: errorMessage,
           color: "error",
         });
@@ -62,3 +62,11 @@ export const getLocation = (store) => {
     );
   });
 };
+
+export function getCurrentTime() {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  return `${hours}:${minutes}:${seconds}`;
+}

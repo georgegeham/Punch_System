@@ -1,0 +1,98 @@
+@import "variable";
+@import "typography";
+
+/* ===================================
+   Global Form Wrappers
+=================================== */
+.form-wrapper {
+  background: $form-bg;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+
+  max-width: 520px;
+  width: 100%;
+  margin-inline: auto;
+
+  h1,
+  h2,
+  h3 {
+    text-align: center;
+    color: $primary_text;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ===================================
+   Vuetify Input Styling
+=================================== */
+.v-input {
+  margin-bottom: 1.2rem !important;
+  border-radius: 8px !important;
+  /* Label */
+  .v-label {
+    font-size: $fs-md !important;
+    font-weight: $fw-medium !important;
+    color: $form-placeholder !important;
+  }
+
+  /* Input & Textarea */
+  input,
+  textarea {
+    font-size: $fs-md !important;
+    color: $form-text !important;
+    margin-top: 0.3rem !important;
+    &::placeholder {
+      color: $form-placeholder !important;
+      opacity: 0.8;
+    }
+  }
+
+  /* Outlined variant border customization */
+  .v-field__outline {
+    border-color: $form-border !important;
+  }
+
+  /* Focused state */
+  &.v-input--focused .v-field__outline {
+    border-color: $form-border-focus !important;
+    border-width: 2px !important;
+  }
+}
+
+/* ===================================
+   Error Message Styling
+=================================== */
+.v-messages__message {
+  font-size: $fs-xs !important;
+  color: $error !important;
+  margin-top: 0.2rem;
+}
+
+/* ===================================
+   Buttons inside Forms
+=================================== */
+.form-btn {
+  width: 100%;
+  padding-block: 0.85rem !important;
+  font-size: $fs-md !important;
+  font-weight: $fw-semibold !important;
+  border-radius: 10px !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+/* Disabled state */
+.form-btn.v-btn--disabled {
+  opacity: 0.6 !important;
+}
+
+/* ===================================
+   Helper Text (Optional)
+=================================== */
+.form-helper {
+  font-size: $fs-sm;
+  text-align: center;
+  color: $form-placeholder;
+  margin-top: 0.8rem;
+}

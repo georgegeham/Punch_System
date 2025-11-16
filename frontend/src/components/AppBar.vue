@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import User from "@/store/slices/Classes/User";
-
 export default {
   name: "AppBar",
   props: {
@@ -25,24 +23,20 @@ export default {
 
   computed: {
     user() {
-      return this.$store.getters.User;
+      return this.$store.state.user.user;
+    },
+  },
+  watch: {
+    user(newVal) {
+      if (newVal) {
+        this.$forceUpdate();
+      }
     },
   },
   methods: {
     async logout() {
-      try {
-        const user = new User();
-        const response = await user.logout();
-        this.$store.dispatch("resetUser");
-        this.$store.commit("showSnackbar", {
-          text: response.message || "Logout successful!",
-          color: "success",
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.$router.push({ name: "Start" });
-      }
+      await this.$store.dispatch("user/logout");
+      this.$router.push({ name: "Start" });
     },
   },
 };

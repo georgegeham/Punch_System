@@ -1,0 +1,40 @@
+/* SCSS HSL */
+$primary: hsla(334, 31%, 18%, 1);
+$primary_text: hsla(212, 62%, 40%, 1);
+$white: hsla(174, 38%, 95%, 1);
+$link: hsla(167, 17%, 49%, 1);
+$error: hsla(359, 85%, 56%, 1);
+
+/* ===== Font Sizes (Base 1rem = 16px) ===== */
+$fs-xs: 0.75rem; // 12px
+$fs-sm: 0.875rem; // 14px
+$fs-md: 1rem; // 16px
+$fs-lg: 1.125rem; // 18px
+$fs-xl: 1.25rem; // 20px
+$fs-2xl: 1.5rem; // 24px
+$fs-3xl: 1.875rem; // 30px
+$fs-4xl: 2.25rem; // 36px
+$fs-5xl: 3rem; // 48px
+
+/* ===== Font Weight Utilities ===== */
+$fw-thin: 100;
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+/* ===== Line Heights ===== */
+$lh-tight: 1.1;
+$lh-normal: 1.4;
+$lh-relaxed: 1.7;
+
+/* ===== Font Families ===== */
+$font-primary: "Inter", "Poppins", Arial, sans-serif;
+
+/* ===== Base Input Styling ===== */
+$form-bg: $white;
+$form-border: hsla(0, 0%, 80%, 1);
+$form-border-focus: $primary;
+$form-text: $white;
+$form-placeholder: hsla(0, 0%, 55%, 1);

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained('users')->onDelete('cascade');
             $table->string('location');
             $table->double('distance');
-            $table->enum('punch_type', ['punchIn', 'punchIout']);
+            $table->enum('punch_type', ['punchIn', 'punchOut']);
             $table->enum('valid', ['inzone', 'outzone']);
             $table->enum('status', ['early', 'early_leave', 'on_time', 'late', 'over_time', 'absent']);
             $table->timestamps();

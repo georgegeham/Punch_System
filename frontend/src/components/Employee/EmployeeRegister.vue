@@ -116,7 +116,7 @@ export default {
       try {
         const employee = new Employee();
         const res = await employee.verifyInvite(this.token);
-        this.$store.commit("showSnackbar", {
+        this.$store.commit("app/showSnackbar", {
           text: res.message || "Token verified successfully",
           color: "success",
         });
@@ -124,7 +124,7 @@ export default {
         this.companyId = res.data.companyId;
         this.valid = true;
       } catch (err) {
-        this.$store.commit("showSnackbar", {
+        this.$store.commit("app/showSnackbar", {
           text:
             err.response?.data?.message || err.message || "An error occurred",
           color: "error",
@@ -162,14 +162,14 @@ export default {
       this.$refs.observer?.reset();
     },
     success(res) {
-      this.$store.commit("showSnackbar", {
+      this.$store.commit("app/showSnackbar", {
         text: res.message || "Registration successful!",
         color: "success",
       });
       this.$router.push({ name: "Login", query: { userType: "Employee" } });
     },
     failed(res) {
-      this.$store.commit("showSnackbar", {
+      this.$store.commit("app/showSnackbar", {
         text: res.response?.data?.message || res.message || "An error occurred",
         color: "error",
       });

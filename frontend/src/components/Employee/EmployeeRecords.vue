@@ -26,7 +26,7 @@
           <!-- Punch Type -->
           <template v-slot:[`item.punch_type`]="{ item }">
             <v-chip
-              :color="item.punch_type === 'punchIn' ? 'green' : 'red'"
+              :color="item.punch_type === 'punchIn' ? 'green' : 'yellow'"
               text-color="white"
               size="small"
               variant="flat"

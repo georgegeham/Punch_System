@@ -15,8 +15,8 @@ class canHr
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->role != 'hr'){
-            return response()->json(['message' => 'You are not authorized to access this route.'], 403);
+        if ($request->user()->role != 'hr') {
+            return response()->json(['message' => 'You are not authorized to access this route.'], 401);
         }
         return $next($request);
     }

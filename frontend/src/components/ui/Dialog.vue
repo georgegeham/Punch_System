@@ -40,16 +40,6 @@
             <v-btn text @click="closeDialog"> Close </v-btn>
             <v-spacer></v-spacer>
             <v-btn
-              v-if="sent"
-              outlined
-              color="primary"
-              @click="resendEmail"
-              :disabled="loading"
-              :loading="resending"
-            >
-              Resend Email
-            </v-btn>
-            <v-btn
               color="primary"
               @click="sendEmail"
               :disabled="loading || invalid"
@@ -65,8 +55,6 @@
 </template>
 
 <script>
-import Employee from "@/store/slices/Classes/Employee";
-
 export default {
   name: "EmployeeEmailDialog",
   props: {
@@ -78,14 +66,12 @@ export default {
   data() {
     return {
       email: "",
-      sent: false,
       sending: false,
-      resending: false,
     };
   },
   computed: {
     loading() {
-      return this.sending || this.resending;
+      return this.$store.state.user.loading;
     },
   },
   methods: {
@@ -93,59 +79,15 @@ export default {
       this.sending = true;
       try {
         // Your send email logic here
-        const response = await this.handleSendEmail();
-        this.sent = true;
+        await this.$store.dispatch("user/inviteUser", this.email);
         this.resetForm();
         this.closeDialog();
-        this.$store.commit("showSnackbar", {
-          text: response.message || "Email sent successfully",
-          color: "success",
-        });
       } catch (error) {
         console.error("Error sending email:", error);
-        this.$store.commit("showSnackbar", {
-          text:
-            error.response?.data?.message ||
-            error.message ||
-            "An error occurred",
-          color: "error",
-        });
         // Handle error (show snackbar, etc.)
       } finally {
         this.sending = false;
       }
-    },
-    async resendEmail() {
-      this.resending = true;
-      try {
-        // Your resend email logic here
-        const response = await this.handleSendEmail();
-        // this.$emit("email-resent", this.email);
-        this.resetForm();
-        this.closeDialog();
-        this.$store.commit("showSnackbar", {
-          text: response.message || "Email resent successfully",
-          color: "success",
-        });
-      } catch (error) {
-        console.error("Error resending email:", error);
-        this.$store.commit("showSnackbar", {
-          text:
-            error.response?.data?.message ||
-            error.message ||
-            "An error occurred",
-          color: "error",
-        });
-        // Handle error (show snackbar, etc.)
-      } finally {
-        this.resending = false;
-      }
-    },
-    async handleSendEmail() {
-      const employee = new Employee();
-
-      const response = await employee.invite(this.email);
-      return response;
     },
     closeDialog() {
       this.resetForm();

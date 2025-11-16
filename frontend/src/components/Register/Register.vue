@@ -1,11 +1,12 @@
 <template>
   <v-container fluid class="d-flex fill-height justify-center">
-    <v-card class="pa-4 text-center rounded-md cardWidth">
-      <v-card-title class="text-h4 justify-center">
-        Register Page
-      </v-card-title>
-      <v-card-text>
-        <span class="d-block text-subtitle-1">Register for HR only</span>
+    <FormCard :loading="loading">
+      <template #title>Register Page </template>
+
+      <span class="d-flex text-center mx-auto text-subtitle-1"
+        >Register for HR only</span
+      >
+      <v-col cols="12" class="mt-4">
         <ValidationObserver v-slot="{ handleSubmit }">
           <v-form @submit.prevent="handleSubmit(onSubmit)" autocomplete="off">
             <ValidationProvider
@@ -19,6 +20,7 @@
                 placeholder="Enter your Name"
                 :error-messages="errors"
                 class="mb-4"
+                autofocus
               ></v-text-field>
             </ValidationProvider>
 
@@ -52,8 +54,7 @@
             </ValidationProvider>
 
             <v-btn
-              color="primary"
-              class="mt-2"
+              class="btn btn-primary btn-lg"
               :loading="loading"
               type="submit"
             >
@@ -62,20 +63,24 @@
 
             <div class="mt-4">
               Already have an account?
-              <router-link :to="{ name: 'Login' }">Login here</router-link>
+              <router-link
+                :to="{ name: 'Login' }"
+                class="btn btn-llink btn-sm pl-0"
+                >Login here</router-link
+              >
             </div>
           </v-form>
         </ValidationObserver>
-      </v-card-text>
-    </v-card>
+      </v-col>
+    </FormCard>
   </v-container>
 </template>
 
 <script>
-import HR from "@/store/slices/Classes/HR";
-
+import FormCard from "@/components/ui/Form.vue";
 export default {
   name: "RegisterPage",
+  components: { FormCard },
   data() {
     return {
       form: {
@@ -83,22 +88,17 @@ export default {
         email: "",
         password: "",
       },
-      loading: false,
     };
+  },
+  computed: {
+    loading() {
+      return this.$store.state.user.loading;
+    },
   },
   methods: {
     async onSubmit() {
-      this.loading = true;
       try {
-        const data = { ...this.form, role: "hr" };
-        const hr = new HR();
-        const response = await hr.create(data);
-
-        this.$store.commit("showSnackbar", {
-          text: response.message,
-          color: "success",
-        });
-
+        await this.$store.dispatch("user/registerHr", this.form);
         this.$router.push({ name: "Login" });
       } catch (error) {
         this.$store.commit("showSnackbar", {
@@ -106,8 +106,6 @@ export default {
             error.response.data.message || error.message || "An error occurred",
           color: "error",
         });
-      } finally {
-        this.loading = false;
       }
     },
   },

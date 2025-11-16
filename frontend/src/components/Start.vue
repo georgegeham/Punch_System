@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="fill-height d-flex align-center justify-center pa-0"
+    class="fill-height h-screen d-flex align-center justify-center pa-0"
   >
     <v-row no-gutters class="fill-height pa-4" align="center" justify="center">
       <v-col cols="12">
@@ -17,19 +17,19 @@
             <h2 class="mt-4 mx-auto">Smart Punching System</h2>
           </v-card-title>
           <v-card-text class="text-center">
-            <p class="my-6">
+            <p>
               A comprehensive location-based attendance management system for
               employees and HR.
             </p>
 
-            <v-row class="mt-4">
+            <v-row>
               <v-col
                 v-for="feature in features"
                 :key="feature.title"
                 cols="12"
                 md="3"
               >
-                <v-card flat class="pa-4 fill-height">
+                <v-card flat class="fill-height">
                   <v-card-title class="d-flex flex-column align-center">
                     <v-icon
                       size="40"
@@ -50,7 +50,7 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="d-flex justify-center">
-            <v-btn color="primary"
+            <v-btn class="btn btn-primary btn-lg"
               ><router-link
                 :to="{ name: 'Login' }"
                 style="color: white; text-decoration: none"

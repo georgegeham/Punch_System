@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
-use App\Models\Punch;
-use App\Models\User;
+use App\Events\PunchEvent;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use App\Repositories\EmployeeRepository;
 
 class Employee extends Controller
 {
+    protected $employeeRepo;
+
+    public function __construct(EmployeeRepository $employeeRepo)
+    {
+        $this->employeeRepo = $employeeRepo;
+    }
+
     public function getAll(Request $request)
     {
-        $employees = User::where('company_id', $request->user()->company_id)->where('role', 'employee')->get();
+        $employees = $this->employeeRepo->getAllEmployees($request->user()->company_id);
 
         return response()->json([
             'status' => 'success',
@@ -23,61 +28,20 @@ class Employee extends Controller
 
     public function punch(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'location' => 'required',
             'distance' => 'required|numeric',
             'punch_type' => 'required|in:punchIn,punchOut',
             'time' => 'required|date_format:H:i:s',
         ]);
 
-        $companyId = $request->user()->company_id;
-        $company = Company::find($companyId);
 
-        if (!$company) {
+        $punch = $this->employeeRepo->recordPunch($request->user(), $validated,);
+
+        if (!$punch) {
             return response()->json(['message' => 'Company not found'], 404);
         }
-
-        // check location zone
-        $valid = $request->input('distance') <= $company->radius ? 'inzone' : 'outzone';
-
-        // convert all times to Carbon for comparison
-        $punchTime = Carbon::createFromFormat('H:i:s', $request->input('time'));
-
-        $status = '';
-        if (isset($company->requires_hours) && $company->requires_hours !== 0) {
-            $startTime = Carbon::createFromFormat('H:i:s', $company->start_time);
-            $endTime   = Carbon::createFromFormat('H:i:s', $company->end_time);
-            if ($request->input('punch_type') === 'punchIn') {
-                if ($punchTime->gt($startTime->copy()->addHours(2))) {
-                    $status = 'absent';
-                } elseif ($punchTime->lt($startTime)) {
-                    $status = 'early';
-                } elseif ($punchTime->eq($startTime)) {
-                    $status = 'on_time';
-                } else {
-                    $status = 'late';
-                }
-            } else {
-                // punch out logic
-                if ($punchTime->lt($endTime)) {
-                    $status = 'early_leave';
-                } elseif ($punchTime->eq($endTime)) {
-                    $status = 'on_time';
-                } else {
-                    $status = 'over_time';
-                }
-            }
-        } else {
-            $status = 'on_time';
-        }
-        $punch = Punch::create([
-            'employee_id' => $request->user()->id,
-            'location'    => $request->input('location'),
-            'distance'    => $request->input('distance'),
-            'punch_type'  => $request->input('punch_type'),
-            'valid'       => $valid,
-            'status'      => $status,
-        ]);
+        event(new PunchEvent($request->user()));
 
         return response()->json([
             'message' => 'Punch recorded successfully',
@@ -87,10 +51,12 @@ class Employee extends Controller
 
     public function EmployeePunches(Request $request)
     {
-        $punches = Punch::query()->join('users', 'punches.employee_id', '=', 'users.id')->where('users.company_id', '=', $request->user()->id)->select('punches.*', 'users.name as employee_name', 'users.email as employee_email')->get();
+        $companyId = $request->user()->companies()->first()->id;
+        $punches = $this->employeeRepo->getEmployeePunches($companyId);
+
         return response()->json([
             'message' => 'Punches fetched successfully',
-            'data' => $punches
+            'data' => $punches,
         ], 200);
     }
 }

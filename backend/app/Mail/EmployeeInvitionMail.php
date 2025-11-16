@@ -18,10 +18,10 @@ class EmployeeInvitionMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($emial, $token)
+    public function __construct($email, $token)
     {
         $this->token = $token;
-        $this->email = $emial;
+        $this->email = $email;
     }
 
     /**

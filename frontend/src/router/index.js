@@ -80,22 +80,23 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const token = JSON.parse(localStorage.getItem("token"));
+  const role = JSON.parse(localStorage.getItem("role"));
 
-  if (to.meta.requiresAuth && !user) {
+  if (to.meta.requiresAuth && !token) {
     next({ name: "Login" });
     return;
   }
 
   if (to.meta.role) {
-    if (!user) {
+    if (!role) {
       next({ name: "Login" });
       return;
     }
-    if (to.meta.role !== user.role) {
-      if (user.role === "hr") {
+    if (to.meta.role !== role) {
+      if (role === "hr") {
         next({ name: "HR Dashboard" });
-      } else if (user.role === "employee") {
+      } else if (role === "employee") {
         next({ name: "Employee Form" });
       } else {
         next({ name: "Login" });

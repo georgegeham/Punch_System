@@ -5,6 +5,10 @@ import store from "./store";
 import "./plugins/vee-validate";
 import "vuetify/dist/vuetify.min.css";
 import vuetify from "./plugins/vuetify";
+import echo from "./components/utils/echo";
+import "./style/index.scss";
+
+Vue.prototype.$echo = echo;
 Vue.config.productionTip = false;
 Vue.use(vuetify);
 new Vue({

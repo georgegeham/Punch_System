@@ -13,7 +13,7 @@
     </v-row>
     <v-row no-gutters class="hcal">
       <v-col cols="12">
-        <EmployeeRecords @pinlocation="handlePinLocation" :punches="punches" />
+        <EmployeeRecords @pinlocation="handlePinLocation" :punches="Records" />
       </v-col>
     </v-row>
 
@@ -25,25 +25,28 @@
   </v-container>
 </template>
 <script>
-import Company from "@/store/slices/Classes/Company";
 import EmployeeRecords from "../Employee/EmployeeRecords.vue";
 import MyMap from "../ui/Map.vue";
 import MyWeather from "../weather/Weather.vue";
-import HR from "@/store/slices/Classes/HR";
 
 export default {
   name: "HrDashboard",
   computed: {
     BusinessSettings() {
-      return this.$store.getters.BusinessSettings;
+      return this.$store.state.business.BusinessSettings;
     },
-    Employees() {
-      return this.$store.getters.Employees;
+    Records() {
+      return this.$store.state.business.records;
+    },
+    BusinessLoading() {
+      return this.$store.state.business.loading;
+    },
+    EmployeeLoading() {
+      return this.$store.state.employee.loading;
     },
   },
   data: () => ({
     employee: null,
-    punches: [],
     companyDone: false,
   }),
   components: {
@@ -54,11 +57,12 @@ export default {
   created() {
     this.getCompany();
   },
+  mounted() {
+    if (this.BusinessSettings.id) this.broadcast();
+  },
   watch: {
-    companyDone() {
-      if (this.companyDone) {
-        this.getRecords();
-      }
+    BusinessSettings() {
+      if (this.BusinessSettings.id) this.broadcast();
     },
   },
   methods: {
@@ -67,58 +71,38 @@ export default {
       this.employee = employee;
     },
     async getCompany() {
-      const company = new Company();
       try {
-        const response = await company.getAll();
-        if (response.companies) {
-          this.$store.dispatch("setBusinessSettings", response.companies);
-          this.success(response);
-          this.companyDone = true;
-          // this.$store.commit("setSelectedCompany", response.companies[0]);
+        await this.$store.dispatch("business/setBusinessSettings");
+        if (this.BusinessSettings.companyName) {
+          return;
         } else {
+          if (this.BusinessLoading) return;
           this.$router.push({ name: "HR Form" });
-          this.$store.commit("showSnackbar", {
+          this.$store.commit("app/showSnackbar", {
             text: "Please register your company",
             color: "info",
           });
         }
       } catch (error) {
         console.log(error);
-        this.failed(error);
       }
     },
-    async getRecords() {
-      try {
-        const hr = new HR();
-        const response = await hr.getPunches();
-        this.punches = response.data;
-        this.success(response);
-        return response.punches;
-      } catch (error) {
-        console.log(error);
-        this.failed(error);
-      }
+    broadcast() {
+      this.$echo
+        .private(`company-${this.BusinessSettings.id}`)
+        .listen("PunchEvent", (e) => {
+          console.log("Received Punch Event:", e);
+          this.$store.dispatch("business/addRecord", e.punch);
+        });
     },
-    success(res) {
-      this.$store.commit("showSnackbar", {
-        text: res.message || "Action is successful!",
-        color: "success",
-      });
-    },
-    failed(err) {
-      this.$store.commit("showSnackbar", {
-        text: err.response?.data?.message || err.message || "An error occurred",
-        color: "error",
-      });
-    },
+  },
+  beforeDestroy() {
+    this.$echo.leave(`company-${this.BusinessSettings.id}`);
   },
 };
 </script>
 <style scoped>
 .first {
   transform: translateY(-20px);
-}
-.hcal {
-  height: calc(50vh);
 }
 </style>

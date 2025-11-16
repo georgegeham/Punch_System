@@ -2,7 +2,7 @@
   <v-container fluid class="pb-0 mb-0">
     <v-card style="min-height: max-content" class="py-2">
       <!-- Loader -->
-      <v-row v-if="status.loading" align="center" justify="center" no-gutters>
+      <v-row v-if="loading" align="center" justify="center" no-gutters>
         <v-col cols="12" class="text-center">
           <v-progress-circular
             indeterminate
@@ -15,15 +15,10 @@
       </v-row>
 
       <!-- Error -->
-      <v-row
-        v-else-if="status.error"
-        align="center"
-        justify="center"
-        no-gutters
-      >
+      <v-row v-else-if="error" align="center" justify="center" no-gutters>
         <v-col cols="12" class="text-center text-error">
           <v-icon color="error" class="mr-2">mdi-alert-circle</v-icon>
-          {{ status.error.message || "Failed to fetch weather data." }}
+          {{ error || "Failed to fetch weather data." }}
         </v-col>
       </v-row>
 
@@ -101,14 +96,14 @@ export default {
   name: "MyWeather",
   computed: {
     weather() {
-      return this.$store.getters.Weather;
+      return this.$store.state.business.weather;
     },
-    status() {
-      return this.$store.getters.status;
+    loading() {
+      return this.$store.state.business.loading;
     },
-  },
-  mounter() {
-    this.weather();
+    error() {
+      return this.$store.state.business.error;
+    },
   },
 };
 </script>

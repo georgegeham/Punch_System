@@ -1,0 +1,116 @@
+/* ================================
+   BUTTON SYSTEM
+   Uses your SCSS HSL colors
+   ================================ */
+
+/* Colors */
+@import "variable";
+
+/* Base button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 5px;
+  font-weight: $fw-semibold;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s ease-in-out;
+  user-select: none;
+  text-decoration: none;
+  font-size: $fs-md;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Primary button */
+.btn-primary {
+  background-color: $primary;
+  color: $white;
+
+  &:hover:not(:disabled) {
+    background-color: lighten($primary, 8%);
+  }
+
+  &:active:not(:disabled) {
+    background-color: lighten($primary, 14%);
+  }
+}
+
+/* Outline button */
+.btn-outline {
+  background-color: transparent;
+  color: $primary;
+  border: 1px solid $primary_text;
+  &:hover:not(:disabled) {
+    background-color: $primary;
+    color: $white;
+  }
+
+  &:active:not(:disabled) {
+    background-color: lighten($primary_text, 90%);
+  }
+}
+
+/* Ghost button (minimal) */
+.btn-ghost {
+  background: transparent;
+  color: $primary;
+
+  &:hover:not(:disabled) {
+    background-color: hsla(334, 31%, 18%, 0.08);
+  }
+
+  &:active:not(:disabled) {
+    background-color: hsla(334, 31%, 18%, 0.14);
+  }
+}
+
+/* Error / danger button */
+.btn-error {
+  background-color: $error;
+  color: $white;
+
+  &:hover:not(:disabled) {
+    background-color: lighten($error, 8%);
+  }
+
+  &:active:not(:disabled) {
+    background-color: lighten($error, 16%);
+  }
+}
+
+/* Link-style button */
+.btn-link {
+  background: transparent;
+  color: $link;
+  padding: 0;
+  font-weight: $fw-semibold;
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+  }
+}
+
+/* Sizes */
+.btn-sm {
+  padding: 0.35rem 0.8rem;
+  font-size: $fs-sm;
+  border-radius: 3px;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.4rem;
+  font-size: $fs-md;
+  border-radius: 8px;
+}
+
+.btn-active {
+  background-color: $primary_text !important;
+  color: $white !important;
+}

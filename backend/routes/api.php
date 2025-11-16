@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Employee;
 use App\Http\Controllers\EmployeeInvitationController;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,6 +17,7 @@ Route::get('/employee/invitation/verify', [EmployeeInvitationController::class, 
 
 Route::post('/employee/invitation/register', [EmployeeInvitationController::class, 'register'])->name('employee.invitation.register');
 
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/employee/punch', [Employee::class, 'punch'])->name('employee.punch');

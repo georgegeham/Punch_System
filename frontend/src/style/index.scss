@@ -1,0 +1,13 @@
+@import "variable";
+@import "buttons";
+@import "typography";
+@import "forms";
+
+/* ===== Base Body Style ===== */
+body {
+  font-family: $font-primary;
+  font-size: $fs-md;
+  color: $white;
+  line-height: $lh-normal;
+  margin: 0;
+}
